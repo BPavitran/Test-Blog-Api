@@ -1,0 +1,80 @@
+# GET http://localhost:3006 HTTP/1.1
+##
+
+# POST http://localhost:3006/api/signIn HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "Don"
+# }
+
+# GET http://localhost:3006/api/users HTTP/1.1
+
+# POST http://localhost:3006/api/update-user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "61143f0127d7112ccc16d93e",
+#     "name": "Vicky"
+# }
+
+# POST http://localhost:3006/api/delete-user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "6114646c4f43133ef04e8f01"
+# }
+
+# POST http://localhost:3006/api/create-post HTTP/1.1
+# content-type: application/json
+
+# {
+#     "title": "Test 3 Post",
+#     "content": "Test Post 3 Test",
+#     "author": "6114646c4f43133ef04e8f01"
+# }
+
+# POST http://localhost:3006/api/update-post HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "6114428980dcdd3188848632",
+#     "content": "My Post Test"
+# }
+
+# POST http://localhost:3006/api/delete-post HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "611459c0633f09029c71e725"
+# }
+
+# GET http://localhost:3006/api/posts HTTP/1.1
+
+# GET http://localhost:3006/api/posts-by-user-id/61143f6827d7112ccc16d943 HTTP/1.1
+
+# GET http://localhost:3006/api/comments-by-post-id/6114428980dcdd3188848632 HTTP/1.1
+
+# POST http://localhost:3006/api/create-comment HTTP/1.1
+# content-type: application/json
+
+# {
+#     "postId" : "611464834f43133ef04e8f04",
+#     "content" : "Very1234 Good",
+#     "author": "61143f0127d7112ccc16d93e"
+# }
+
+# POST http://localhost:3006/api/update-comment HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "61144b5b6522870a784a7ba6",
+#     "content" : "Good"
+# }
+
+# POST http://localhost:3006/api/delete-comment HTTP/1.1
+# content-type: application/json
+
+# {
+#     "id": "611458726243303d587c9709"
+# }
