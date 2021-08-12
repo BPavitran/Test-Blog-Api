@@ -13,3 +13,7 @@
 
     User 2
     name: Vicky
+
+### Database
+
+    MONGOOSE_URI = mongodb+srv://testUser:1234@cluster0.wngy6.mongodb.net/test
