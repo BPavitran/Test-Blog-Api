@@ -2,7 +2,7 @@
 
 ### Setup
 
-01. Create `.env` file. (see `.nev.example` file).
+01. Create `.env` file. (see `.env.example` file).
 02. run `npm install`.
 03. run `npm start` to start development server with auto refresh on changes.
 
