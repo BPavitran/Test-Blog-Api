@@ -14,7 +14,7 @@ export namespace CommentEp {
         try{
             const postId = req.params.postId;
             if(!postId){
-                Util.sendError(res, "Please send Post Id");
+                return Util.sendError(res, "Please send Post Id");
             }
             const post = await PostDao.getPostById(postId);
             const commentsIds = post.comments.map((comment : any) => comment.id)
