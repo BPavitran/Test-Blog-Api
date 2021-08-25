@@ -12,9 +12,9 @@ export namespace PostEp {
     export async function getAllPosts(req: Request, res: Response){
         try{
             const posts = await PostDao.getAllPosts();
-            Util.sendSuccess(res, posts);
+            return Util.sendSuccess(res, posts);
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -22,9 +22,9 @@ export namespace PostEp {
         try{
             const userId = req.params.userId;
             const posts = await PostDao.getPostsByUserId(userId);
-            Util.sendSuccess(res, posts);
+            return Util.sendSuccess(res, posts);
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -47,6 +47,12 @@ export namespace PostEp {
     export async function createPost(req: Request, res: Response){
         try{
             const postData = req.body;
+
+            const user = await UserDao.getUserById(postData.author);
+            if(!user){
+                return Util.sendError(res, "Send Correct User Id");
+            }
+
             const error = await postValidations(postData)
             if(!error){
                 const author = postData.author;
@@ -54,12 +60,12 @@ export namespace PostEp {
                 const user = await UserDao.getUserById(author);
                 const newPostCount = user.numberOfPosts + 1;
                 await UserDao.updateUserById(author, {numberOfPosts : newPostCount});
-                Util.sendSuccess(res, post);
+                return Util.sendSuccess(res, post);
             } else {
-                Util.sendError(res, "Please fill post data correctly");
+                return Util.sendError(res, "Please fill post data correctly");
             }
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -68,18 +74,24 @@ export namespace PostEp {
             const postData = req.body;
             const postId = req.body.id;
             if(!postId){
-                Util.sendError(res, "Please send Post Id");
+                return Util.sendError(res, "Please send Post Id");
             }
+
+            const checkPost = await PostDao.getPostById(postId);
+            if(!checkPost){
+                return Util.sendError(res, "Send Correct Post Id");
+            }
+
             const error = await postValidations(postData)
             if(!error){
                 delete postData.id;
                 const post = await PostDao.updatePostById(postId, postData);
-                Util.sendSuccess(res, post);
+                return Util.sendSuccess(res, post);
             } else {
-                Util.sendError(res, "Please fill post data correctly");
+                return Util.sendError(res, "Please fill post data correctly");
             }
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -87,7 +99,12 @@ export namespace PostEp {
         try{
             const postId = req.body.id;
             if(!postId){
-                Util.sendError(res, "Please send Post Id");
+                return Util.sendError(res, "Please send Post Id");
+            }
+
+            const checkPost = await PostDao.getPostById(postId);
+            if(!checkPost){
+                return Util.sendError(res, "Send Correct Post Id");
             }
             
             const post = await PostDao.getPostById(postId);
@@ -99,9 +116,9 @@ export namespace PostEp {
             await CommentDao.deleteCommentsByids(commentsIds);
             await PostDao.deletePostByid(postId);
             
-            Util.sendSuccess(res, "Successfully Post Deleted");
+            return Util.sendSuccess(res, "Successfully Post Deleted");
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 }

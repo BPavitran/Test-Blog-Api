@@ -12,9 +12,9 @@ export namespace UserEp {
     export async function getAllUsers(req: Request, res: Response){
         try{
             const users = await UserDao.getAllUsers();
-            Util.sendSuccess(res, users);
+            return Util.sendSuccess(res, users);
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -28,12 +28,12 @@ export namespace UserEp {
                     numberOfPosts : 0
                 }
                 const user = await UserDao.createUser(newUserData);
-                Util.sendSuccess(res, user);
+                return Util.sendSuccess(res, user);
             } else {
-                Util.sendSuccess(res, alreadyExistsUser);
+                return Util.sendSuccess(res, alreadyExistsUser);
             }
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -58,18 +58,24 @@ export namespace UserEp {
             const userUpdatedData = req.body;
             const userId = req.body.id;
             if(!userId){
-                Util.sendError(res, "Send Correct User Id");
+                return Util.sendError(res, "Send User Id");
             }
+
+            const user = await UserDao.getUserById(userId);
+            if(!user){
+                return Util.sendError(res, "Send Correct User Id");
+            }
+
             const error = await userUpdateValidations(userUpdatedData);
             if(!error){
                 delete userUpdatedData.id;
                 const updatedUser = await UserDao.updateUserById(userId, userUpdatedData);
-                Util.sendSuccess(res, updatedUser);
+                return Util.sendSuccess(res, updatedUser);
             } else {
-                Util.sendError(res, "Send User Data Correctly");
+                return Util.sendError(res, "Send User Data Correctly");
             }
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
@@ -77,7 +83,12 @@ export namespace UserEp {
         try{
             const userId = req.body.id;
             if(!userId){
-                Util.sendError(res, "Send Correct User Id");
+                return Util.sendError(res, "Send User Id");
+            }
+
+            const user = await UserDao.getUserById(userId);
+            if(!user){
+                return Util.sendError(res, "Send Correct User Id");
             }
 
             const posts = await PostDao.getPostsByUserId(userId);
@@ -99,9 +110,9 @@ export namespace UserEp {
             await PostDao.deletePostsByids(postsIds);
             await CommentDao.deleteCommentsByids(uniqueArray);
             
-            Util.sendSuccess(res, "Successfully User Deleted");
+            return Util.sendSuccess(res, "Successfully User Deleted");
         } catch (e) {
-            Util.sendError(res, e);
+            return Util.sendError(res, e);
         }
     }
 
